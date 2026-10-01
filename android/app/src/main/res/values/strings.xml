@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ferramentas HVAC-R</string>
+    <string name="title_activity_main">Ferramentas HVAC-R</string>
+    <string name="package_name">com.rodneyhertz.hvactools</string>
+    <string name="custom_url_scheme">com.rodneyhertz.hvactools</string>
+</resources>

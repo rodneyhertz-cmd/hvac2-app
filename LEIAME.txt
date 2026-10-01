@@ -1,0 +1,5 @@
+Passo 1: no GitHub, crie um repositorio novo (publico ou privado).
+Passo 2: Add file > Upload files. Arraste TUDO que esta dentro desta pasta (www, android, package.json, capacitor.config.json...). Clique Commit changes.
+Passo 3: Add file > Create new file. No nome digite: .github/workflows/build-apk.yml  e cole o texto do arquivo build-apk.yml.txt. Commit changes.
+Passo 4: aba Actions > Gerar APK > Run workflow. Espere ~5 min, abra a execucao e baixe "hvac-tools-apk" em Artifacts.
+Passo 5: descompacte, passe o app-debug.apk para o celular e instale.

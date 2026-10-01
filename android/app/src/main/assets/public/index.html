@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#121212">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HVAC Tools">
+<link id="pwa-manifest" rel="manifest">
+<title>Ferramentas HVAC-R</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#121212;color:#fff;font-family:Roboto,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100dvh}
+.wrap{max-width:448px;margin:0 auto;padding:18px 18px 96px}
+.page{display:none}.page.on{display:block}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+
+/* Cabeçalho */
+.head{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px}
+.round{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.round.gray{background:#3b3b3d}.round.red{background:#c9000f}
+.head h1{margin:0;font-size:20px;line-height:24px;font-weight:700;text-align:center}
+
+/* Layout principal */
+.main{display:flex;gap:14px}
+.left{width:39%;height:518px;background:#1e1e1e;border-radius:12px;position:relative;display:flex;flex-direction:column;touch-action:none;user-select:none;-webkit-user-select:none}
+.left .hd{height:45px;padding:8px 8px 0;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:17px}
+#ruler-box{flex:1;margin:0 5px 5px;border:1px solid #3a3a3a;border-radius:8px;position:relative;overflow:hidden}
+#ruler-svg{position:absolute;inset:0;width:100%;height:100%}
+#thumb{position:absolute;left:-4px;right:-4px;height:54px;border-radius:8px;background:rgba(255,255,255,.22);pointer-events:none}
+#thumb i{position:absolute;left:9px;right:9px;top:50%;height:1.5px;background:#fff}
+#thumb i:before,#thumb i:after{content:"";position:absolute;top:-6px;width:1.5px;height:13.5px;background:#fff}
+#thumb i:before{left:0}#thumb i:after{right:0}
+.right{flex:1;min-width:0}
+.card{background:#1e1e1e;border-radius:12px}
+.gas{width:100%;height:55px;padding:0 14px 0 13px;display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:700}
+.toggles{height:120px;display:flex;flex-direction:column;justify-content:center;gap:21px}
+.trow{height:26px;display:flex;align-items:center;justify-content:space-between;padding-left:3px;font-weight:700;font-size:17px}
+.sw{position:relative;width:46px;height:26px;flex:none}
+.sw input{display:none}
+.sw label{position:absolute;inset:4px 0;border-radius:99px;background:#7c7c82;transition:.2s;cursor:pointer}
+.sw label:after{content:"";position:absolute;top:-4px;left:-2px;width:26px;height:26px;border-radius:50%;background:#e8e8ea;transition:.2s}
+.sw input:checked+label{background:#5a1218}
+.sw input:checked+label:after{background:#c1000f;transform:translateX(24px)}
+.sw input:disabled+label{opacity:.5}
+.val{border:1px solid #3a3a3a;border-radius:10px;height:61px;padding:0 12px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;margin-bottom:10px;background:#1e1e1e}
+.val input{background:none;border:0;outline:0;color:#fff;font-family:inherit;font-size:21px;font-weight:700;line-height:26px;width:100%;text-align:right;padding:0;caret-color:#c9000f}.val span{font-size:14px;color:#8d8d92;line-height:18px}
+.tab{margin:-3px 0 0 auto;width:50px;height:22px;background:#2b2b2d;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;position:relative}
+.tab svg{transition:transform .2s}.tab.open svg{transform:rotate(90deg)}
+.spec{border-radius:12px 0 12px 12px;padding:12px 14px 10px;font-size:15px;line-height:24px}
+.spec div{display:flex;justify-content:space-between;align-items:center}
+.spec b{font-weight:700}
+.spec .full{display:block}
+.dot{width:16px;height:16px;border-radius:50%;margin-right:2px}
+.sign{text-align:center;margin-top:20px;color:#FFD700;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;opacity:.9}
+
+/* Barra inferior */
+nav{position:fixed;left:0;right:0;bottom:0;background:#1c1c1e;border-top:1px solid #2a2a2c;z-index:30;padding-bottom:env(safe-area-inset-bottom,0)}
+nav .in{max-width:448px;margin:0 auto;display:flex;height:68px}
+nav button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#8d8d92;font-size:13px;padding:0 2px}
+nav button span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav button.on{color:#fff;font-weight:700}
+nav svg{width:26px;height:26px}
+
+/* Modais */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:50;display:none;flex-direction:column;justify-content:flex-end}
+.sheet{background:#1e1e1e;border-radius:24px 24px 0 0;padding:22px;width:100%;max-width:448px;margin:0 auto;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease-out;border-top:1px solid #333}
+.sheet.in{transform:none}
+.sheet h2{margin:0 0 14px;font-size:18px}
+.sheet p{font-size:13px;line-height:1.5;color:#ccc;margin:6px 0}
+.gasitem{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer}
+.gasitem:hover{background:#2a2a2c}
+.gasitem i{width:16px;height:16px;border-radius:50%}
+.gasitem small{display:block;color:#8d8d92;font-size:11px}
+
+/* Magnetic */
+.mag{padding:20px;display:flex;justify-content:center;position:relative;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid2 .card{padding:12px}.grid2 b{font-size:18px}.grid2 small{display:block;color:#8d8d92;font-size:12px;margin-top:2px}
+.status{text-align:center;font-size:12px;font-weight:600;color:#eab308;margin-bottom:12px}
+.simrow{display:flex;justify-content:space-between;align-items:center;padding:16px;font-size:14px;font-weight:500;cursor:pointer}
+.simtg{width:48px;height:24px;border-radius:99px;background:#4b5563;position:relative;transition:.3s}
+.simtg i{position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.3s}
+.simtg.on{background:#c9000f}.simtg.on i{transform:translateX(24px)}
+.empty{text-align:center;color:#8d8d92;padding:120px 0;font-size:15px}
+.setm{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);visibility:hidden;opacity:0;transition:.3s}
+.setm.on{visibility:visible;opacity:1}
+.drawer{position:absolute;top:0;bottom:0;right:0;width:85%;max-width:380px;background:#141414;overflow-y:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 18px 30px;transform:translateX(100%);transition:transform .3s}
+.setm.on .drawer{transform:none}
+.drawer h2{margin:0;font-size:22px;font-weight:700}
+.drawer .dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.selc{position:relative;background:#2a2a2e;border-radius:10px;padding:12px 16px;margin-bottom:16px}
+.selc small{display:block;color:#8d8d92;font-size:14px}.selc b{font-size:18px;display:block}
+.selc select{position:absolute;inset:0;width:100%;opacity:0;font-size:16px}
+.selc svg{position:absolute;right:14px;top:50%;margin-top:-12px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid #2a2a2c;font-size:17px;font-weight:500;gap:12px}
+.row b{font-weight:700}
+.seg{display:flex;background:#1f1f22;border-radius:14px;height:46px;width:134px;flex:none}
+.seg.w{width:195px}
+.seg button{flex:1;border-radius:14px;color:#8d8d92;font-size:17px}
+.seg button.on{background:#2f2f33;color:#fff}
+.drawer h3{font-size:22px;margin:30px 0 14px}
+#alt-box{display:none;padding:14px 0;border-bottom:1px solid #2a2a2c;font-size:14px;color:#ccc}
+#alt-box input{background:#2a2a2e;border:0;outline:0;color:#fff;border-radius:8px;padding:8px 10px;width:100px;font-size:16px;margin:0 6px}
+#install-banner{display:none;margin-bottom:12px;background:#2563eb;border-radius:12px;padding:10px 12px;align-items:center;justify-content:space-between;font-size:13px}
+#install-banner button{background:#fff;color:#2563eb;font-weight:700;padding:6px 14px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="install-banner"><div><b>Instalar Aplicativo</b><br><small>Adicione à tela inicial para usar como App</small></div><button id="btn-install">Instalar</button></div>
+
+  <!-- ============ RÉGUA ============ -->
+  <section id="p-regua" class="page on">
+    <div class="head">
+      <button class="round gray" aria-label="Voltar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <h1>Régua de<br>Refrigerantes</h1>
+      <button class="round red" onclick="toggleSettings()" aria-label="Configurações"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h9M18 8h3M3 16h3M12 16h9"/><rect x="13" y="5.5" width="4" height="5" rx="1" fill="#fff"/><rect x="7" y="13.5" width="4" height="5" rx="1" fill="#fff"/></svg></button>
+    </div>
+
+    <div class="main">
+      <div class="left" id="ruler-panel">
+        <div class="hd"><span id="lbl-unit">psi(a)</span><span id="lbl-t">°C</span></div>
+        <div id="ruler-box"><svg id="ruler-svg"></svg></div>
+        <div id="thumb"><i></i></div>
+      </div>
+
+      <div class="right">
+        <button class="card gas" onclick="toggleGas()"><span id="gas-name">R404A</span>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div class="toggles">
+          <div class="trow">Dew<div class="sw"><input type="checkbox" id="t-dew" checked><label for="t-dew"></label></div></div>
+          <div class="trow">Absoluta<div class="sw"><input type="checkbox" id="t-abs" checked><label for="t-abs"></label></div></div>
+        </div>
+        <div class="val"><input id="d-press" inputmode="decimal" autocomplete="off" value="121.8" aria-label="Pressão"><span id="d-unit">psi (a)</span></div>
+        <div class="val" style="margin-bottom:0"><input id="d-temp" autocomplete="off" value="11.00" aria-label="Temperatura"><span id="d-tunit">°C</span></div>
+        <div class="tab" id="tab-arrow" onclick="toggleSpec()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></div>
+        <div class="card spec" id="spec">
+          <b class="full">Grupo de Segurança</b>
+          <span class="full" id="i-safety">A1</span>
+          <div><b id="i-gwp-l">GWP-AR4</b><span id="i-gwp">3922</span></div>
+          <div><b>ODP</b><span id="i-odp">0</span></div>
+          <div><b>Temp. Crít.</b><span><span id="i-tcrit">72.12</span> °C</span></div>
+          <b class="full">Ebul. (0 psi (g))</b>
+          <span class="full"><span id="i-ebul">-46.22</span> °C</span>
+          <div><b>Cor</b><i class="dot" id="i-color" style="background:#FF6600"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="sign">Criado por Rodney Hertz</div>
+  </section>
+
+  <!-- ============ FERRAMENTAS (MAGNETIC TOOL) ============ -->
+  <section id="p-tools" class="page">
+    <div class="head">
+      <button class="round gray" aria-label="Voltar" onclick="go('regua')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <h1>Magnetic Tool</h1>
+      <button class="round red" onclick="toggleHelp()" aria-label="Ajuda"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
+    </div>
+    <div class="card mag">
+      <svg viewBox="0 0 300 300" width="250" height="250">
+        <defs><linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#94a3b8"/><stop offset=".5" stop-color="#475569"/><stop offset="1" stop-color="#1e293b"/></linearGradient></defs>
+        <circle cx="150" cy="150" r="145" fill="url(#rim)"/><circle cx="150" cy="150" r="135" fill="#0f172a"/>
+        <g fill="#94a3b8" font-size="12" font-weight="700" font-family="sans-serif" text-anchor="middle"><text x="150" y="30" fill="#ef4444" font-size="15">N</text><text x="150" y="280">S</text><text x="274" y="155">E</text><text x="26" y="155">W</text></g>
+        <g id="needle" style="transform-origin:150px 150px;transition:transform .08s ease-out">
+          <polygon points="150,45 162,150 138,150" fill="#ef4444"/><polygon points="150,255 162,150 138,150" fill="#cbd5e1"/></g>
+        <circle cx="150" cy="150" r="11" fill="#cbd5e1" stroke="#475569" stroke-width="2"/><circle cx="150" cy="150" r="4" fill="#1e293b"/>
+      </svg>
+      <button onclick="toggleSound()" aria-label="Alarme sonoro" style="position:absolute;left:14px;bottom:14px;background:#2a2a2c;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center"><svg id="snd" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.6l4.7-4.7c.6-.6 1.7-.2 1.7.7v14c0 .9-1.1 1.3-1.7.7L5.6 15z"/><path id="snd-x" d="M17 14l4-4m0 4l-4-4"/></svg></button>
+    </div>
+    <div class="grid2">
+      <div class="card"><b>AC: <span id="ac">0</span> µT</b><small>Limite: 3 µT</small></div>
+      <div class="card"><b>DC: <span id="dc">37</span> µT</b><small>Limite: 120 µT</small></div>
+    </div>
+    <div class="status" id="sensor-status">Aguardando ativação do sensor...</div>
+    <p style="text-align:center;font-size:12px;color:#ccc;margin:0 8px 16px">A agulha gira quando o campo magnético detectado está acima do limite especificado.</p>
+    <div class="card simrow" onclick="toggleSim()"><span>Simulador de Magnetismo</span><div class="simtg" id="simtg"><i></i></div></div>
+    <div class="sign">Criado por Rodney Hertz</div>
+  </section>
+
+  <section id="p-prod" class="page"><div class="empty">Produtos<br><small>Em breve</small></div></section>
+  <section id="p-conf" class="page"><div class="empty">Configurações<br><small>Em breve</small></div></section>
+</div>
+
+<nav><div class="in">
+  <button id="n-regua" class="on" onclick="go('regua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="8" height="20" rx="1.5" fill="currentColor" stroke="none"/><path d="M9 6h4M10 9h3M9 12h4M10 15h3M9 18h4" stroke="#1c1c1e"/><path d="M16 21v-6a1.2 1.2 0 012.4 0v2l3-.5v4" stroke="currentColor"/></svg><span>Régua de Refrigerantes</span></button>
+  <button id="n-tools" onclick="go('tools')"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg><span>Ferramentas</span></button>
+  <button id="n-prod" onclick="go('prod')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="14" cy="10" r="6"/><path d="M18.5 14.5L22 18M2 17h6M2 21h6M2 13h3"/></svg><span>Produtos</span></button>
+  <button id="n-conf" onclick="go('conf')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 000-2l2.1-1.6-2-3.4-2.5 1a7.6 7.6 0 00-1.7-1L15 3.3h-4l-.4 2.7a7.6 7.6 0 00-1.7 1l-2.5-1-2 3.4L6.6 11a7.5 7.5 0 000 2l-2.1 1.6 2 3.4 2.5-1c.5.4 1.1.7 1.7 1l.4 2.7h4l.4-2.7c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.4L19.4 13zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/></svg><span>Configurações</span></button>
+</div></nav>
+
+<div id="set-modal" class="setm"><div class="drawer">
+  <div class="dh"><h2>Configurações</h2><button class="round gray" onclick="toggleSettings()" aria-label="Fechar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="selc"><small>Pressão</small><b id="s-press-v">psi</b>
+    <select id="s-press"><option>psi</option><option>bar</option><option>kPa</option><option>MPa</option></select>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="row"><b>Temperatura</b><div class="seg" id="s-t" data-k="t"><button data-v="C">°C</button><button data-v="F">°F</button></div></div>
+  <div class="row"><b>Unidade de distância</b><div class="seg" id="s-d" data-k="d"><button data-v="m">m</button><button data-v="ft">ft</button></div></div>
+  <h3>Régua de Refrigerantes</h3>
+  <div class="row"><b style="font-size:22px">GWP</b><div class="seg w" id="s-g" data-k="g"><button data-v="0">AR4</button><button data-v="1">AR5</button><button data-v="2">AR6</button></div></div>
+  <div class="row"><span style="display:flex;align-items:center;gap:14px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V5M4 9l4-4 4 4M16 4v15M12 15l4 4 4-4"/></svg>Inverta a régua</span><div class="sw"><input type="checkbox" id="s-inv"><label for="s-inv"></label></div></div>
+  <div class="row" style="cursor:pointer" onclick="toggleAlt()"><span>Pressão ambiente e manométrica</span><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M2 19l7-11 4 6 2.5-3.5L22 19z"/></svg></div>
+  <div id="alt-box">Altitude<input id="s-alt" inputmode="numeric" value="0"><span id="s-altu">m</span><p style="margin:10px 0 0">Pressão ambiente: <b id="s-atm"></b></p></div>
+  <div class="row" style="cursor:pointer" onclick="shareCfg()"><span id="s-share-t">Compartilhe suas configurações</span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="6" cy="12" r="2.6" fill="#fff"/><circle cx="18" cy="5.5" r="2.6" fill="#fff"/><circle cx="18" cy="18.5" r="2.6" fill="#fff"/><path d="M8 11l8-4.2M8 13l8 4.2"/></svg></div>
+</div></div>
+
+<div id="gas-modal" class="modal"><div class="sheet" id="gas-sheet"><h2>Selecionar Fluido Refrigerante</h2><div id="gas-list"></div></div></div>
+<div id="help-modal" class="modal"><div class="sheet" id="help-sheet">
+  <h2>Magnetic Tool - Ajuda</h2>
+  <p><b>O que é?</b> Usa o magnetômetro do telefone para detectar o campo ao redor de uma válvula solenoide e indicar se ela está funcionando.</p>
+  <p><b>Como funciona?</b> Segure o celular a menos de 10 cm da bobina ou bomba CA/CC. Se um campo anormal for detectado, a agulha começa a girar. O alarme sonoro e a vibração ajudam em locais onde não dá para ver a tela.</p>
+  <p><b>Não funciona?</b> A válvula pode estar quebrada, ou o magnetômetro do seu celular fica em outro ponto. Teste posições diferentes.</p>
+</div></div>
+
+<script>
+/* ===== Fluidos (pressão em bar abs) ===== */
+const db={
+'R404A':{color:'#FF6600',safety:'A1',gwp:3922,odp:0,tcrit:72.12,ebul:-46.22,pdew:[[-60,.44],[-40,1.33],[-20,3.00],[0,6.05],[20,11.00],[40,18.36],[60,28.87]],pbub:[[-60,.42],[-40,1.29],[-20,2.93],[0,5.92],[20,10.85],[40,18.15],[60,28.60]]},
+'R134a':{color:'#66CCFF',safety:'A1',gwp:1430,odp:0,tcrit:101.06,ebul:-26.07,pdew:[[-60,.16],[-40,.51],[-20,1.33],[0,2.93],[20,5.72],[40,10.17],[60,16.83]],pbub:null},
+'R22':{color:'#99FF99',safety:'A1',gwp:1810,odp:.055,tcrit:96.15,ebul:-40.81,pdew:[[-60,.38],[-40,1.05],[-20,2.45],[0,4.98],[20,9.10],[40,15.34],[60,24.27]],pbub:null},
+'R410A':{color:'#FF99CC',safety:'A1',gwp:2088,odp:0,tcrit:71.34,ebul:-51.35,pdew:[[-60,.68],[-40,1.75],[-20,4.00],[0,8.00],[20,14.44],[40,24.20],[60,38.30]],pbub:[[-60,.67],[-40,1.74],[-20,3.98],[0,7.97],[20,14.39],[40,24.12],[60,38.15]]},
+'R32':{color:'#FF0000',safety:'A2L',gwp:675,odp:0,tcrit:78.11,ebul:-51.65,pdew:[[-60,.81],[-40,2.12],[-20,4.71],[0,9.14],[20,16.21],[40,26.54],[60,40.85]],pbub:null},
+'R600a':{color:'#FFFFFF',safety:'A3',gwp:3,odp:0,tcrit:134.66,ebul:-11.75,pdew:[[-60,.05],[-40,.15],[-20,.40],[0,.91],[20,1.86],[40,3.40],[60,5.80]],pbub:null},
+'R290':{color:'#FFFFFF',safety:'A3',gwp:3,odp:0,tcrit:96.67,ebul:-42.11,pdew:[[-60,.32],[-40,.90],[-20,2.11],[0,4.23],[20,7.68],[40,12.93],[60,20.55]],pbub:null},
+'R717':{color:'#FFFF00',safety:'B2L',gwp:0,odp:0,tcrit:132.25,ebul:-33.33,pdew:[[-60,.22],[-40,.72],[-20,1.90],[0,4.29],[20,8.57],[40,15.55],[60,26.15]],pbub:null},
+'R1234yf':{color:'#33CC66',safety:'A2L',gwp:4,odp:0,tcrit:94.70,ebul:-29.48,pdew:[[-60,.19],[-40,.58],[-20,1.50],[0,3.25],[20,6.32],[40,11.20],[60,18.50]],pbub:null},
+'R407C':{color:'#9933CC',safety:'A1',gwp:1774,odp:0,tcrit:86.03,ebul:-43.56,pdew:[[-60,.35],[-40,.98],[-20,2.29],[0,4.75],[20,8.90],[40,15.20],[60,24.30]],pbub:[[-60,.32],[-40,.91],[-20,2.15],[0,4.50],[20,8.45],[40,14.50],[60,23.30]]}
+};
+const PSI=14.5038, TMIN=-60, TMAX=60; let ATM=14.6959;
+let gas='R404A', temp=11;
+const $=id=>document.getElementById(id);
+const dew=$('t-dew'), abs=$('t-abs');
+
+/* Interpolação logarítmica (pressão de saturação é ~exponencial) */
+function pBar(t){
+  const c=(!dew.checked&&db[gas].pbub)?db[gas].pbub:db[gas].pdew;
+  let i=0; while(i<c.length-2&&t>c[i+1][0]) i++;
+  const [t1,p1]=c[i],[t2,p2]=c[i+1];
+  return Math.exp(Math.log(p1)+(t-t1)/(t2-t1)*(Math.log(p2)-Math.log(p1)));
+}
+const pShow=t=>pBar(t)*PSI-(abs.checked?0:ATM);
+function tFor(p){
+  if(p<pShow(TMIN)||p>pShow(TMAX)) return null;
+  let a=TMIN,b=TMAX; for(let k=0;k<40;k++){const m=(a+b)/2; pShow(m)<p?a=m:b=m;} return (a+b)/2;
+}
+
+/* ===== Configurações ===== */
+const PU={
+ psi:{f:1,dec:1,base:1,s:v=>v<50?1:v<200?5:10,lab:[5,10,15,20,30,40,50,100,150,200,250,300,350,400,450,500,550,600,700]},
+ bar:{f:.0689476,dec:2,base:.1,s:v=>v<5?.1:v<20?.5:1,lab:[.5,1,1.5,2,3,4,5,10,15,20,25,30,35,40]},
+ kPa:{f:6.89476,dec:0,base:10,s:v=>v<500?10:v<2000?50:100,lab:[50,100,200,300,500,1000,2000,3000,4000]},
+ MPa:{f:.00689476,dec:3,base:.01,s:v=>v<.5?.01:v<2?.05:.1,lab:[.1,.2,.5,1,2,3,4]}
+};
+/* GWP [AR4, AR5, AR6] */
+const GWP={R404A:[3922,3943,4728],R134a:[1430,1300,1530],R22:[1810,1760,1960],R410A:[2088,1924,2256],R32:[675,677,771],R600a:[3,3,3],R290:[3,3,.02],R717:[0,0,0],R1234yf:[4,1,.5],R407C:[1774,1624,1908]};
+const cfg={p:'psi',t:'C',d:'m',g:0,inv:false,alt:0};
+try{Object.assign(cfg,JSON.parse(localStorage.getItem('hvac-cfg')||'{}'))}catch(e){}
+try{const h=new URLSearchParams(location.hash.slice(1));
+  if(PU[h.get('p')]){cfg.p=h.get('p');cfg.t=h.get('t')==='F'?'F':'C';cfg.d=h.get('d')==='ft'?'ft':'m';cfg.g=Math.min(2,Math.max(0,+h.get('g')||0));cfg.inv=h.get('inv')==='1';cfg.alt=Math.max(0,+h.get('alt')||0)}}catch(e){}
+const save=()=>{try{localStorage.setItem('hvac-cfg',JSON.stringify(cfg))}catch(e){}};
+const toT=c=>cfg.t==='F'?c*9/5+32:c, fromT=v=>cfg.t==='F'?(v-32)*5/9:v;
+
+/* ===== Régua ===== */
+const PAD_T=31, PAD_B=45, AX_P=64, AX_T=71;
+let H=0;
+const yOf=t=>{const f=(t-TMIN)/(TMAX-TMIN);return PAD_T+(cfg.inv?1-f:f)*(H-PAD_T-PAD_B)};
+
+function drawRuler(){
+  const box=$('ruler-box'); H=box.clientHeight; if(!H) return;
+  const ln=(x1,y,x2)=>`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="#d6d6d6" stroke-width="1"/>`;
+  let s='';
+  const T=cfg.t==='F'?{st:2,mid:10,maj:20}:{st:1,mid:5,maj:10};
+  const a=toT(TMIN), b=toT(TMAX);
+  for(let v=Math.ceil(a/T.st)*T.st; v<=b+1e-9; v+=T.st){
+    const y=yOf(fromT(v)), mj=v%T.maj===0, L=mj?13:v%T.mid===0?8:4;
+    s+=ln(AX_T,y,AX_T+L);
+    if(mj) s+=`<text x="${AX_T+19}" y="${y+4.5}" fill="#d0d0d0" font-size="13">${v}</text>`;
+  }
+  s+=`<line x1="${AX_T}" x2="${AX_T}" y1="${yOf(TMIN)}" y2="${yOf(TMAX)}" stroke="#d6d6d6"/>`;
+  const u=PU[cfg.p], pMin=pShow(TMIN)*u.f, pMax=pShow(TMAX)*u.f;
+  const al=(v,st)=>Math.abs(v/st-Math.round(v/st))<1e-6;
+  for(let k=Math.max(1,Math.ceil(pMin/u.base-1e-9)); k*u.base<=pMax; k++){
+    const v=k*u.base; if(!al(v,u.s(v))) continue;
+    const t=tFor(v/u.f); if(t!==null) s+=ln(AX_P-4,yOf(t),AX_P);
+  }
+  let last=-99;
+  u.lab.forEach(v=>{
+    const t=tFor(v/u.f); if(t===null) return; const y=yOf(t); if(Math.abs(y-last)<14) return; last=y;
+    s+=ln(AX_P-14,y,AX_P)+`<text x="44" y="${y+5}" fill="#e6e6e6" font-size="15" text-anchor="end">${v}</text>`;
+  });
+  $('ruler-svg').innerHTML=s;
+  placeThumb();
+}
+function placeThumb(){ $('thumb').style.top=($('ruler-box').offsetTop+yOf(temp)-27)+'px'; }
+
+/* ===== Cálculo e UI ===== */
+function update(skip){
+  const u=PU[cfg.p], un=`${cfg.p} (${abs.checked?'a':'g'})`;
+  if(skip!=='d-temp') $('d-temp').value=toT(temp).toFixed(2);
+  if(skip!=='d-press') $('d-press').value=(pShow(temp)*u.f).toFixed(u.dec);
+  $('d-unit').textContent=un; $('lbl-unit').textContent=un.replace(' ','');
+  $('d-tunit').textContent=$('lbl-t').textContent='°'+cfg.t;
+  placeThumb();
+}
+function specs(){
+  const d=db[gas];
+  $('gas-name').textContent=gas;
+  $('i-safety').textContent=d.safety; $('i-odp').textContent=d.odp;
+  $('i-gwp').textContent=GWP[gas][cfg.g]; $('i-gwp-l').textContent='GWP-AR'+(4+cfg.g);
+  $('i-tcrit').textContent=d.tcrit.toFixed(2); $('i-ebul').textContent=d.ebul.toFixed(2);
+  $('i-color').style.background=d.color;
+  dew.disabled=!d.pbub; if(!d.pbub) dew.checked=true;
+}
+function full(){specs();drawRuler();update();}
+
+/* Campos editáveis */
+const num=el=>parseFloat(el.value.replace(',','.'));
+$('d-temp').addEventListener('input',e=>{const v=num(e.target); if(isNaN(v)) return;
+  temp=Math.min(TMAX,Math.max(TMIN,fromT(v))); update('d-temp')});
+$('d-press').addEventListener('input',e=>{const v=num(e.target); if(isNaN(v)) return;
+  const psi=v/PU[cfg.p].f, t=tFor(psi);
+  temp=t===null?(psi<pShow(TMIN)?TMIN:TMAX):t; update('d-press')});
+['d-temp','d-press'].forEach(id=>{const el=$(id);
+  el.addEventListener('focus',()=>setTimeout(()=>el.select(),0));
+  el.addEventListener('change',()=>update());
+  el.addEventListener('blur',()=>update());
+  el.addEventListener('keydown',e=>{if(e.key==='Enter')el.blur()});});
+
+/* Arrasto da régua */
+const panel=$('ruler-panel'); let drag=false;
+function fromY(cy){
+  const r=$('ruler-box').getBoundingClientRect();
+  let f=(cy-r.top-PAD_T)/(H-PAD_T-PAD_B); if(cfg.inv) f=1-f;
+  temp=Math.round(Math.min(TMAX,Math.max(TMIN,TMIN+f*(TMAX-TMIN)))*10)/10; update();
+}
+panel.addEventListener('pointerdown',e=>{drag=true;panel.setPointerCapture(e.pointerId);fromY(e.clientY)});
+panel.addEventListener('pointermove',e=>{if(drag)fromY(e.clientY)});
+['pointerup','pointercancel'].forEach(ev=>panel.addEventListener(ev,()=>drag=false));
+dew.addEventListener('change',()=>{drawRuler();update()});
+abs.addEventListener('change',()=>{drawRuler();update()});
+window.addEventListener('resize',drawRuler);
+
+/* Painel de configurações */
+function seg(id,val){document.querySelectorAll('#'+id+' button').forEach(b=>b.classList.toggle('on',b.dataset.v===val))}
+function ambient(){
+  ATM=101.325*Math.pow(1-2.25577e-5*cfg.alt,5.25588)*0.145038;
+  const u=PU[cfg.p]; $('s-atm').textContent=(ATM*u.f).toFixed(u.dec+1)+' '+cfg.p;
+}
+function applyCfg(){
+  $('s-press').value=cfg.p; $('s-press-v').textContent=cfg.p;
+  seg('s-t',cfg.t); seg('s-d',cfg.d); seg('s-g',String(cfg.g));
+  $('s-inv').checked=cfg.inv;
+  $('s-alt').value=Math.round(cfg.d==='ft'?cfg.alt*3.28084:cfg.alt); $('s-altu').textContent=cfg.d;
+  ambient(); buildGasList();
+}
+document.querySelectorAll('.seg').forEach(sg=>sg.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return; const k=sg.dataset.k;
+  cfg[k]=k==='g'?+b.dataset.v:b.dataset.v; applyCfg(); full(); save();}));
+$('s-press').addEventListener('change',e=>{cfg.p=e.target.value;applyCfg();full();save()});
+$('s-inv').addEventListener('change',e=>{cfg.inv=e.target.checked;full();save()});
+$('s-alt').addEventListener('input',e=>{const v=num(e.target); if(isNaN(v)) return;
+  cfg.alt=Math.min(9000,Math.max(0,cfg.d==='ft'?v/3.28084:v)); ambient(); full(); save()});
+function toggleSettings(){$('set-modal').classList.toggle('on')}
+$('set-modal').addEventListener('click',e=>{if(e.target.id==='set-modal')toggleSettings()});
+function toggleAlt(){const x=$('alt-box'); x.style.display=x.style.display==='block'?'none':'block'}
+async function shareCfg(){
+  const url=location.href.split('#')[0]+'#'+new URLSearchParams({p:cfg.p,t:cfg.t,d:cfg.d,g:cfg.g,inv:+cfg.inv,alt:cfg.alt});
+  try{
+    if(navigator.share) await navigator.share({title:'Ferramentas HVAC-R',url});
+    else{await navigator.clipboard.writeText(url);$('s-share-t').textContent='Link copiado!';setTimeout(()=>$('s-share-t').textContent='Compartilhe suas configurações',1800)}
+  }catch(e){}
+}
+
+/* Lista de gases */
+function buildGasList(){
+  const L=$('gas-list'); L.innerHTML='';
+  Object.keys(db).forEach(g=>{
+    const d=document.createElement('div'); d.className='gasitem';
+    d.innerHTML=`<i style="background:${db[g].color}"></i><div><b>${g}</b><small>Segurança: ${db[g].safety} | GWP: ${GWP[g][cfg.g]}</small></div>`;
+    d.onclick=()=>{gas=g;full();toggleGas()}; L.appendChild(d);
+  });
+}
+
+/* Modais */
+function sheet(m,s){
+  const M=$(m),S=$(s);
+  if(M.style.display!=='flex'){M.style.display='flex';setTimeout(()=>S.classList.add('in'),10)}
+  else{S.classList.remove('in');setTimeout(()=>M.style.display='none',300)}
+}
+const toggleGas=()=>sheet('gas-modal','gas-sheet'), toggleHelp=()=>sheet('help-modal','help-sheet');
+['gas-modal','help-modal'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.id===id)id==='gas-modal'?toggleGas():toggleHelp()}));
+function toggleSpec(){
+  const open=$('spec').style.display!=='none';
+  $('spec').style.display=open?'none':'block'; $('tab-arrow').classList.toggle('open',open);
+}
+
+/* Navegação inferior */
+function go(id){
+  const map={regua:'regua',tools:'tools',prod:'prod',conf:'conf'};
+  Object.keys(map).forEach(k=>{
+    $('p-'+k).classList.toggle('on',k===id);
+    $('n-'+k).classList.toggle('on',k===id);
+  });
+  if(id==='regua') drawRuler();
+  if(id==='tools') startSensor(); else stopSensor();
+}
+
+/* ===== Magnetic Tool (sensor real) ===== */
+const LIM_DC=120, LIM_AC=3;
+let sim=false, sound=true, actx=null, angle=0, sensor=null, buf=[], cnt=0, rate=0, rateT=0, lastBeep=0;
+function setSoundUI(){ $('snd').style.stroke=sound?'#4ade80':'#9ca3af'; $('snd-x').style.display=sound?'none':''; }
+function ensureAudio(){ try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){} }
+function toggleSound(){ sound=!sound; setSoundUI(); if(sound) ensureAudio(); }
+document.addEventListener('pointerdown',()=>{ if(sound) ensureAudio(); });
+function beep(){
+  if(!sound||!actx) return;
+  try{ const o=actx.createOscillator(),g=actx.createGain(); o.frequency.value=880;
+    g.gain.setValueAtTime(.15,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.1);
+    o.connect(g); g.connect(actx.destination); o.start(); o.stop(actx.currentTime+.1);}catch(e){}
+}
+function alarm(){
+  const n=performance.now(); if(n-lastBeep<160) return; lastBeep=n; beep();
+  if('vibrate' in navigator){try{navigator.vibrate(60)}catch(e){}}
+}
+function setStatus(t,c){const s=$('sensor-status'); if(s.textContent!==t) s.textContent=t; s.style.color=c;}
+function magUI(dc,ac,x,y){
+  const hdc=dc>LIM_DC, hac=ac>LIM_AC, hot=hdc||hac||sim;
+  $('dc').textContent=Math.round(dc); $('ac').textContent=ac<10?ac.toFixed(1):Math.round(ac);
+  $('dc').parentElement.style.color=(hdc||sim)?'#ef4444':''; $('ac').parentElement.style.color=(hac||sim)?'#ef4444':'';
+  if(hot){ angle+=35; alarm(); } else angle=(x===undefined)?0:Math.atan2(x,y)*180/Math.PI;
+  $('needle').style.transform=`rotate(${angle}deg)`;
+  if(sim) return;
+  const r=rate?` · ${rate} Hz`:'';
+  setStatus(hot?'Campo magnético detectado!'+r:'Sensor ativo — aproxime da bobina ou alto-falante'+r, hot?'#ef4444':'#4ade80');
+}
+function onMag(v){
+  v=v||sensor; if(!v||sim) return;
+  const {x,y,z}=v; if(x==null) return;
+  const dc=Math.hypot(x,y,z);                       // DC = intensidade total do campo (µT)
+  buf.push([x,y,z]); if(buf.length>24) buf.shift();
+  let ac=0;                                         // AC = amplitude da oscilação do campo (µT)
+  if(buf.length>=12){
+    let v=0; for(let k=0;k<3;k++){ let m=0; buf.forEach(r=>m+=r[k]); m/=buf.length; buf.forEach(r=>v+=(r[k]-m)**2); }
+    ac=Math.sqrt(2*v/buf.length);
+  }
+  const now=performance.now(); cnt++; if(now-rateT>=1000){rate=cnt;cnt=0;rateT=now;}
+  magUI(dc,ac,x,y);
+}
+const NATIVE=()=>window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.Plugins&&Capacitor.Plugins.Magnet;
+let nHandle=null;
+function startSensor(){
+  if(sensor||sim) return;
+  const M=NATIVE();
+  if(M){                                           // app Android: sensor nativo, sem flag do Chrome
+    buf=[]; cnt=0; rate=0; rateT=performance.now(); sensor={native:true};
+    setStatus('Iniciando sensor...','#eab308');
+    M.addListener('reading',onMag).then(h=>{nHandle=h});
+    M.start().catch(()=>{sensor=null;setStatus('Este aparelho não tem magnetômetro.','#ef4444')});
+    return;
+  }
+  if(!window.isSecureContext) return setStatus('Abra o app por HTTPS para liberar o sensor magnético.','#eab308');
+  if(!('Magnetometer' in window)) return setStatus('Magnetômetro bloqueado. No Chrome, abra chrome://flags, ative "Generic Sensor Extra Classes" e reinicie o Chrome.','#eab308');
+  try{
+    const sn=new Magnetometer({frequency:55});     // 55 Hz: faz 50 e 60 Hz da rede aparecerem como ~5 Hz
+    sn.addEventListener('reading',onMag);
+    sn.addEventListener('error',e=>{
+      const n=e.error&&e.error.name; sensor=null;
+      setStatus(n==='NotAllowedError'?'Permissão negada: libere "Sensores de movimento" nas configurações do site.':'Sensor magnético indisponível neste aparelho.','#ef4444');
+    });
+    buf=[]; cnt=0; rate=0; rateT=performance.now(); sensor=sn; sn.start();
+    setStatus('Iniciando sensor...','#eab308');
+  }catch(e){
+    setStatus(e&&e.name==='SecurityError'?'Permissão negada: libere "Sensores de movimento" nas configurações do site.':'Não foi possível iniciar o sensor.','#ef4444');
+  }
+}
+function stopSensor(){
+  if(sensor&&sensor.native){ const M=NATIVE(); try{M.stop()}catch(e){} if(nHandle){try{nHandle.remove()}catch(e){} nHandle=null;} sensor=null; return; }
+  if(sensor){try{sensor.stop()}catch(e){} sensor=null;}
+}
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopSensor(); else if($('p-tools').classList.contains('on')) startSensor(); });
+function toggleSim(){
+  sim=!sim; $('simtg').classList.toggle('on',sim);
+  if(sim){ setStatus('Simulador ativo: Detectando campo solenoide!','#60a5fa'); loop(); }
+  else{ magUI(37,0); setStatus(sensor?'Sensor ativo — aproxime da bobina ou alto-falante':'Sensor em repouso.','#eab308'); if(!sensor) startSensor(); }
+}
+function loop(){ if(!sim) return; magUI(180+Math.random()*40,5); setTimeout(loop,100); }
+setSoundUI();
+
+/* ===== PWA ===== */
+const man={name:"Ferramentas HVAC-R",short_name:"HVAC Tools",start_url:location.href,display:"standalone",background_color:"#121212",theme_color:"#121212",orientation:"portrait",
+  icons:[{src:"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M13 10V3L4 14h7v7l9-11h-7z'/%3E%3C/svg%3E",sizes:"192x192",type:"image/svg+xml"}]};
+$('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:'application/json'}));
+let dp;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('install-banner').style.display='flex'});
+$('btn-install').addEventListener('click',async()=>{
+  if(!dp) return; dp.prompt(); const{outcome}=await dp.userChoice;
+  if(outcome==='accepted') $('install-banner').style.display='none'; dp=null;
+});
+
+applyCfg();full();
+requestAnimationFrame(drawRuler);
+</script>
+</body>
+</html>
