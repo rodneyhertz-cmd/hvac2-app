@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#121212">
+<meta name="theme-color" content="#0a0e17">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HVAC Tools">
@@ -17,11 +17,49 @@ body{min-height:100dvh}
 .page{display:none}.page.on{display:block}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
 
+/* Cores Padrão - Azul Ciano (Atualizado do Vermelho) */
+:root { --accent: #0ea5e9; --accent-dk: #0369a1; --accent-bg: #e0f2fe; }
+
 /* Cabeçalho */
 .head{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px}
 .round{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.round.gray{background:#3b3b3d}.round.red{background:#c9000f}
+.round.gray{background:#3b3b3d}.round.accent{background:var(--accent)}
 .head h1{margin:0;font-size:20px;line-height:24px;font-weight:700;text-align:center}
+
+/* ========================================= */
+/* TELA INICIAL (HOME) */
+/* ========================================= */
+#p-home {
+  position: fixed; inset: 0; z-index: 20;
+  background: linear-gradient(to bottom, rgba(10, 14, 23, 0.88), rgba(6, 9, 15, 0.98)), url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=800&q=80') center/cover;
+  padding: max(30px, env(safe-area-inset-top)) 20px calc(100px + env(safe-area-inset-bottom));
+  flex-direction: column; align-items: center; justify-content: space-between;
+  display: none;
+  overflow-y: auto;
+}
+#p-home.on { display: flex; }
+
+.h-logo { display:flex; justify-content:center; align-items:center; margin-bottom: 12px; flex-shrink: 0; }
+.h-title { font-size: 30px; font-weight: 900; line-height: 1.1; margin: 0 0 12px; text-align: center; flex-shrink: 0; }
+.h-title span.hvac { color: #00b4ff; }
+.h-title span.htz { color: #e2e8f0; text-shadow: 0px 2px 4px rgba(0,0,0,0.5); }
+.h-sub { font-size: 13.5px; color: #cbd5e1; text-align: center; max-width: 380px; margin: 0 auto 24px; line-height: 1.5; padding: 0 10px; flex-shrink: 0; }
+
+.h-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; max-width: 440px; flex-shrink: 0; }
+.h-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 8px 2px; transition: transform 0.2s; }
+.h-item:active { transform: scale(0.95); }
+.h-item svg { width: 30px; height: 30px; color: #00b4ff; }
+.h-item span { font-size: 10px; color: #f8fafc; font-weight: 500; text-align: center; }
+.h-item.sep { position: relative; }
+.h-item.sep::after { content: ''; position: absolute; right: -3px; top: 10px; bottom: 10px; width: 1px; background: rgba(255,255,255,0.15); }
+
+.h-foot { display: flex; flex-direction: column; align-items: center; margin-top: auto; padding-top: 24px; width: 100%; flex-shrink: 0; }
+.h-line { width: 60%; max-width: 200px; height: 1px; background: rgba(255,255,255,0.15); margin-bottom: 12px; box-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+.h-foot span { font-size: 10px; letter-spacing: 0.2em; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+.h-foot b { font-size: 16px; color: #facc15; margin-top: 4px; letter-spacing: 0.05em; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.h-dots { display: flex; gap: 8px; margin-top: 16px; margin-bottom: 8px; }
+.h-dots i { width: 8px; height: 8px; border-radius: 50%; background: #334155; }
+.h-dots i.active { background: #00b4ff; }
 
 /* Layout principal */
 .main{display:flex;gap:14px}
@@ -38,15 +76,16 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .gas{width:100%;height:55px;padding:0 14px 0 13px;display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:700}
 .toggles{height:120px;display:flex;flex-direction:column;justify-content:center;gap:21px}
 .trow{height:26px;display:flex;align-items:center;justify-content:space-between;padding-left:3px;font-weight:700;font-size:17px}
+
 .sw{position:relative;width:46px;height:26px;flex:none}
 .sw input{display:none}
 .sw label{position:absolute;inset:4px 0;border-radius:99px;background:#7c7c82;transition:.2s;cursor:pointer}
 .sw label:after{content:"";position:absolute;top:-4px;left:-2px;width:26px;height:26px;border-radius:50%;background:#e8e8ea;transition:.2s}
-.sw input:checked+label{background:#5a1218}
-.sw input:checked+label:after{background:#c1000f;transform:translateX(24px)}
+.sw input:checked+label{background:var(--accent-dk)}
+.sw input:checked+label:after{background:var(--accent);transform:translateX(24px)}
 .sw input:disabled+label{opacity:.5}
 .val{border:1px solid #3a3a3a;border-radius:10px;height:61px;padding:0 12px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;margin-bottom:10px;background:#1e1e1e}
-.val input{background:none;border:0;outline:0;color:#fff;font-family:inherit;font-size:21px;font-weight:700;line-height:26px;width:100%;text-align:right;padding:0;caret-color:#c9000f}.val span{font-size:14px;color:#8d8d92;line-height:18px}
+.val input{background:none;border:0;outline:0;color:#fff;font-family:inherit;font-size:21px;font-weight:700;line-height:26px;width:100%;text-align:right;padding:0;caret-color:var(--accent)}.val span{font-size:14px;color:#8d8d92;line-height:18px}
 .tab{margin:-3px 0 0 auto;width:50px;height:22px;background:#2b2b2d;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;position:relative}
 .tab svg{transition:transform .2s}.tab.open svg{transform:rotate(90deg)}
 .spec{border-radius:12px 0 12px 12px;padding:12px 14px 10px;font-size:15px;line-height:24px}
@@ -54,17 +93,17 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .spec b{font-weight:700}
 .spec .full{display:block}
 .dot{width:16px;height:16px;border-radius:50%;margin-right:2px}
-.sign{text-align:center;margin-top:20px;color:#FFD700;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;opacity:.9}
 
 /* Barra inferior */
 nav{position:fixed;left:0;right:0;bottom:0;background:#1c1c1e;border-top:1px solid #2a2a2c;z-index:30;padding-bottom:env(safe-area-inset-bottom,0)}
 nav .in{max-width:448px;margin:0 auto;display:flex;height:68px}
-nav button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#8d8d92;font-size:13px;padding:0 2px}
+nav button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#8d8d92;font-size:12px;padding:0 2px}
 nav button span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 nav button.on{color:#fff;font-weight:700}
-nav svg{width:26px;height:26px}
+nav button.on svg{color:var(--accent)}
+nav svg{width:24px;height:24px}
 
-/* Modais */
+/* Modais e Componentes */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:50;display:none;flex-direction:column;justify-content:flex-end}
 .sheet{background:#1e1e1e;border-radius:24px 24px 0 0;padding:22px;width:100%;max-width:448px;margin:0 auto;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease-out;border-top:1px solid #333}
 .sheet.in{transform:none}
@@ -75,7 +114,11 @@ nav svg{width:26px;height:26px}
 .gasitem i{width:16px;height:16px;border-radius:50%}
 .gasitem small{display:block;color:#8d8d92;font-size:11px}
 
-/* Magnetic */
+/* Toast */
+.toast{position:fixed;top:40px;left:50%;transform:translate(-50%, -150%);background:#334155;color:#fff;padding:12px 24px;border-radius:99px;font-size:14px;font-weight:600;opacity:0;transition:0.3s cubic-bezier(0.175,0.885,0.32,1.275);z-index:100;box-shadow:0 4px 12px rgba(0,0,0,0.5)}
+.toast.show{transform:translate(-50%, 0);opacity:1}
+
+/* Magnetic Tool */
 .mag{padding:20px;display:flex;justify-content:center;position:relative;margin-bottom:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .grid2 .card{padding:12px}.grid2 b{font-size:18px}.grid2 small{display:block;color:#8d8d92;font-size:12px;margin-top:2px}
@@ -83,10 +126,10 @@ nav svg{width:26px;height:26px}
 .simrow{display:flex;justify-content:space-between;align-items:center;padding:16px;font-size:14px;font-weight:500;cursor:pointer}
 .simtg{width:48px;height:24px;border-radius:99px;background:#4b5563;position:relative;transition:.3s}
 .simtg i{position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.3s}
-.simtg.on{background:#c9000f}.simtg.on i{transform:translateX(24px)}
-.empty{text-align:center;color:#8d8d92;padding:120px 0;font-size:15px}
+.simtg.on{background:var(--accent-dk)}.simtg.on i{background:var(--accent);transform:translateX(24px)}
 .setm{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);visibility:hidden;opacity:0;transition:.3s}
 .setm.on{visibility:visible;opacity:1}
+
 .drawer{position:absolute;top:0;bottom:0;right:0;width:85%;max-width:380px;background:#141414;overflow-y:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 18px 30px;transform:translateX(100%);transition:transform .3s}
 .setm.on .drawer{transform:none}
 .drawer h2{margin:0;font-size:22px;font-weight:700}
@@ -104,16 +147,18 @@ nav svg{width:26px;height:26px}
 .drawer h3{font-size:22px;margin:30px 0 14px}
 #alt-box{display:none;padding:14px 0;border-bottom:1px solid #2a2a2c;font-size:14px;color:#ccc}
 #alt-box input{background:#2a2a2e;border:0;outline:0;color:#fff;border-radius:8px;padding:8px 10px;width:100px;font-size:16px;margin:0 6px}
+
+/* Sensor Slider */
 .sens{padding:16px 16px 12px;margin-bottom:12px}
 .sens .sh{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;font-weight:600;margin-bottom:10px}
 .sens .sh b{font-size:24px;color:#4ade80;font-variant-numeric:tabular-nums;line-height:1}
 #sens{-webkit-appearance:none;appearance:none;width:100%;height:34px;background:transparent;outline:0;margin:0;display:block;touch-action:none;cursor:pointer}
-#sens::-webkit-slider-runnable-track{height:10px;border-radius:99px;background:linear-gradient(90deg,#15803d,#4ade80) 0 0/var(--p,35%) 100% no-repeat,#2f2f33}
-#sens::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-10px;border-radius:50%;background:#fff;border:3px solid #4ade80;box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 6px rgba(74,222,128,.16)}
-#sens:active::-webkit-slider-thumb{box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 10px rgba(74,222,128,.22)}
+#sens::-webkit-slider-runnable-track{height:10px;border-radius:99px;background:linear-gradient(90deg,var(--accent-dk),var(--accent)) 0 0/var(--p,35%) 100% no-repeat,#2f2f33}
+#sens::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-10px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 6px rgba(14,165,233,.16)}
+#sens:active::-webkit-slider-thumb{box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 10px rgba(14,165,233,.22)}
 #sens::-moz-range-track{height:10px;border-radius:99px;background:#2f2f33}
-#sens::-moz-range-progress{height:10px;border-radius:99px;background:#4ade80}
-#sens::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid #4ade80}
+#sens::-moz-range-progress{height:10px;border-radius:99px;background:var(--accent)}
+#sens::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid var(--accent)}
 .sens .ticks{height:6px;margin:0 15px;background:repeating-linear-gradient(90deg,#4b5563 0 1px,transparent 1px 10%);border-right:1px solid #4b5563}
 .sens .sl{display:grid;grid-template-columns:1fr auto 1fr;margin-top:6px;font-size:13px;color:#cbd5e1;font-weight:600}
 .sens .sl span:last-child{text-align:right}.sens .sl span:nth-child(2){text-align:center}
@@ -121,18 +166,87 @@ nav svg{width:26px;height:26px}
 .sens .hint{margin:10px 0 0;font-size:11px;color:#6b7280;text-align:center}
 #install-banner{display:none;margin-bottom:12px;background:#2563eb;border-radius:12px;padding:10px 12px;align-items:center;justify-content:space-between;font-size:13px}
 #install-banner button{background:#fff;color:#2563eb;font-weight:700;padding:6px 14px;border-radius:8px}
+
+.about-mag{padding:20px;font-size:14px;line-height:1.6;color:#e4e4e7;margin-top:16px}
+.about-mag h2{margin:0 0 20px;font-size:18px;color:#fff;text-align:center;font-weight:700}
+.about-mag h3{margin:24px 0 8px;font-size:15px;color:var(--accent);font-weight:700}
+.about-mag p{margin:0 0 12px}
+.about-mag ul{margin:0 0 12px;padding-left:24px}
+.about-mag li{margin-bottom:8px}
+.about-mag .note{background:#2a2a2c;padding:14px;border-radius:10px;font-size:13px;color:#cbd5e1;border-left:4px solid #eab308;margin-top:24px}
 </style>
 </head>
 <body>
+<div id="toast" class="toast">Mensagem</div>
+
+<!-- ============ TELA INICIAL (HOME) ============ -->
+<section id="p-home" class="page on">
+  <div></div> <!-- Espaçador superior -->
+  
+  <div style="display:flex; flex-direction:column; align-items:center;">
+    <!-- Logo SVG Composta -->
+    <div class="h-logo">
+      <svg width="110" height="110" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Floco de neve (Refrigeração - Azul) -->
+        <g stroke="#00b4ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(10, 25) scale(0.6)">
+          <path d="M50 10v80M10 50h80M22 22l56 56M22 78l56-56"/>
+          <path d="M40 20l10-10 10 10M40 80l10 10 10-10M20 40l-10 10 10 10M80 40l10 10-10 10M32 32l-7-10M32 68l-7 10M68 32l7-10M68 68l7 10"/>
+        </g>
+        <!-- Engrenagem (Automação - Prata/Cinza) -->
+        <g stroke="#94a3b8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(65, 25) scale(0.6)">
+          <path d="M50 20a30 30 0 100 60 30 30 0 000-60z"/>
+          <path d="M50 5v15M50 80v15M18 18l11 11M71 71l11 11M5 50h15M80 50h15M18 82l11-11M71 29l11-11"/>
+        </g>
+        <!-- Termômetro (Centro - Branco e Azul) -->
+        <g transform="translate(42, 10) scale(0.8)">
+          <path d="M22 65a14 14 0 100 28 14 14 0 000-28z" fill="#00b4ff" stroke="#f8fafc" stroke-width="4"/>
+          <path d="M14 68V20a8 8 0 0116 0v48" fill="none" stroke="#f8fafc" stroke-width="4" stroke-linecap="round"/>
+          <path d="M22 68V35" stroke="#00b4ff" stroke-width="4" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+
+    <h1 class="h-title">Ferramenta de<br><span class="hvac">HVAC</span> <span class="htz">- HTZ</span></h1>
+    <p class="h-sub">Indicado para profissionais da área de Refrigeração, automação naval e residencial, eletricidade residencial e automotiva, incluindo GNV, auxiliando no diagnóstico.</p>
+
+    <!-- Ícones de Navegação da Home -->
+    <div class="h-grid">
+      <div class="h-item sep" onclick="go('regua')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M4.9 19.1L19.1 4.9M8 4l4-4 4 4M8 20l4 4 4-4M4 8l-4 4 4 4M20 8l4 4-4 4"/></svg>
+        <span>Refrigeração</span>
+      </div>
+      <div class="h-item sep" onclick="go('tools')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span>Automação</span>
+      </div>
+      <div class="h-item sep" onclick="showToast('Módulo em breve!')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l4.5-4.5"/><path d="M16 16v6"/><path d="M22 16v6"/><path d="M19 16v6"/></svg>
+        <span>Monitoramento</span>
+      </div>
+      <div class="h-item" onclick="showToast('Módulo em breve!')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span>Manutenção</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="h-foot">
+    <div class="h-line"></div>
+    <span>Criado por</span>
+    <b>RODNEY HERTZ</b>
+    <div class="h-dots"><i class="active"></i><i></i><i></i></div>
+  </div>
+</section>
+
 <div class="wrap">
   <div id="install-banner"><div><b>Instalar Aplicativo</b><br><small>Adicione à tela inicial para usar como App</small></div><button id="btn-install">Instalar</button></div>
 
   <!-- ============ RÉGUA ============ -->
-  <section id="p-regua" class="page on">
+  <section id="p-regua" class="page">
     <div class="head">
-      <button class="round gray" aria-label="Voltar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <button class="round gray" aria-label="Voltar" onclick="go('home')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       <h1>Régua de<br>Refrigerantes</h1>
-      <button class="round red" onclick="toggleSettings()" aria-label="Configurações"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h9M18 8h3M3 16h3M12 16h9"/><rect x="13" y="5.5" width="4" height="5" rx="1" fill="#fff"/><rect x="7" y="13.5" width="4" height="5" rx="1" fill="#fff"/></svg></button>
+      <button class="round accent" onclick="toggleSettings()" aria-label="Configurações"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h9M18 8h3M3 16h3M12 16h9"/><rect x="13" y="5.5" width="4" height="5" rx="1" fill="#fff"/><rect x="7" y="13.5" width="4" height="5" rx="1" fill="#fff"/></svg></button>
     </div>
 
     <div class="main">
@@ -164,15 +278,14 @@ nav svg{width:26px;height:26px}
         </div>
       </div>
     </div>
-    <div class="sign">Criado por Rodney Hertz</div>
   </section>
 
   <!-- ============ FERRAMENTAS (MAGNETIC TOOL) ============ -->
   <section id="p-tools" class="page">
     <div class="head">
-      <button class="round gray" aria-label="Voltar" onclick="go('regua')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <button class="round gray" aria-label="Voltar" onclick="go('home')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       <h1>Magnetic Tool</h1>
-      <button class="round red" onclick="toggleHelp()" aria-label="Ajuda"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="round accent" onclick="toggleHelp()" aria-label="Ajuda"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     </div>
     <div class="card mag">
       <svg viewBox="0 0 300 300" width="250" height="250">
@@ -193,19 +306,62 @@ nav svg{width:26px;height:26px}
     <div id="diag" style="text-align:center;font-size:11px;color:#6b7280;margin:-6px 0 12px"></div>
     <p style="text-align:center;font-size:12px;color:#ccc;margin:0 8px 16px">A agulha gira quando o campo magnético detectado está acima do limite especificado.</p>
     <div class="card sens">
-      <div class="sh"><span>Sensibilidade do Sensor Magnético</span><b id="sens-pct">35%</b></div>
+      <div class="sh"><span>Sensibilidade do Sensor</span><b id="sens-pct">35%</b></div>
       <input type="range" id="sens" min="0" max="100" step="1" value="35" aria-label="Sensibilidade do sensor magnético">
       <div class="ticks"></div>
       <div class="sl"><span>Baixa<small>0%</small></span><span>Média<small>50%</small></span><span>Alta<small>100%</small></span></div>
       <p class="hint">A leitura em µT não muda; o ajuste altera os limites de alarme e a suavização da agulha.</p>
     </div>
-    <div class="sign">Criado por Rodney Hertz</div>
   </section>
-  <section id="p-conf" class="page"><div class="empty">Configurações<br><small>Em breve</small></div></section>
+
+  <!-- ============ CONFIGURAÇÕES ============ -->
+  <section id="p-conf" class="page">
+    <div class="head">
+      <button class="round gray" aria-label="Voltar" onclick="go('home')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <h1>Configurações</h1>
+      <button class="round" style="visibility:hidden"></button>
+    </div>
+    
+    <div class="card about-mag">
+      <h2>Como funciona o Magnetic Tool (HTZ)</h2>
+      
+      <h3>1. Escala do microtesla (µT)</h3>
+      <p>O microtesla é uma unidade utilizada para medir a intensidade do campo magnético. Um microtesla equivale a 0,000001 tesla, ou seja, um milionésimo de tesla.</p>
+      
+      <h3>2. Campo magnético terrestre</h3>
+      <p>O campo magnético natural da Terra apresenta intensidade aproximada entre 25 µT e 65 µT, dependendo da localização geográfica. Portanto, leituras nessa faixa podem representar o campo magnético terrestre normal, mesmo em ambientes abertos. Fonte: NOAA/NCEI.</p>
+      
+      <h3>3. Variações do campo magnético</h3>
+      <p>Leituras diferentes do esperado podem ser causadas pela proximidade de ímãs, alto-falantes, motores elétricos, bobinas, estruturas metálicas magnetizadas ou equipamentos elétricos. A variação observada depende da distância, da orientação do aparelho e das características da fonte magnética.</p>
+      
+      <h3>4. Ajuste de sensibilidade</h3>
+      <p>O Magnetic Tool possui uma barra deslizante que permite ajustar a sensibilidade de 0% a 100%, conforme o ambiente de utilização.</p>
+      <ul>
+        <li><b>Baixa sensibilidade:</b> reduz a resposta visual a pequenas variações e pode diminuir oscilações ou alertas frequentes.</li>
+        <li><b>Sensibilidade média:</b> oferece um equilíbrio entre estabilidade e percepção das variações magnéticas.</li>
+        <li><b>Alta sensibilidade:</b> destaca pequenas variações detectadas pelo sensor, podendo aumentar a quantidade de alertas.</li>
+      </ul>
+      <p>O ajuste deve atuar no processamento visual e nos critérios de detecção, preservando o valor físico original medido pelo magnetômetro.</p>
+      
+      <h3>5. Limites de alarme AC e DC</h3>
+      <p>Os valores apresentados nos cartões AC e DC representam os limites de detecção configurados no aplicativo. Esses limites devem ser atualizados automaticamente ao movimentar a barra de sensibilidade.</p>
+      <p>É importante distinguir os valores medidos pelo sensor dos limites utilizados para gerar alertas. A indicação AC ou DC também deve corresponder ao método de processamento realmente implementado no código.</p>
+      
+      <h3>6. Agulha da bússola</h3>
+      <p>A estabilidade da agulha pode ser ajustada por meio de filtragem e suavização das leituras. Com maior filtragem, o movimento visual tende a ficar mais estável, mas pode responder mais lentamente às mudanças. Com menor filtragem, a resposta tende a ser mais rápida, porém mais sujeita a oscilações.</p>
+      
+      <h3>7. Configuração padrão</h3>
+      <p>A sensibilidade inicial poderá ser definida em 35%, desde que esse valor seja validado por testes práticos. Os limites AC e DC correspondentes devem ser calculados pela fórmula efetivamente utilizada no aplicativo.</p>
+      <p>A configuração original poderá ser reproduzida selecionando o percentual que gere os limites anteriores de 3 µT para AC e 120 µT para DC, após a confirmação da fórmula de ajuste.</p>
+      
+      <p class="note"><b>Observação:</b> o magnetômetro do celular mede o campo magnético resultante no local. A confiabilidade da indicação depende do sensor, da calibração, da orientação do aparelho e do processamento utilizado pelo aplicativo.</p>
+    </div>
+  </section>
 </div>
 
 <nav><div class="in">
-  <button id="n-regua" class="on" onclick="go('regua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="8" height="20" rx="1.5" fill="currentColor" stroke="none"/><path d="M9 6h4M10 9h3M9 12h4M10 15h3M9 18h4" stroke="#1c1c1e"/><path d="M16 21v-6a1.2 1.2 0 012.4 0v2l3-.5v4" stroke="currentColor"/></svg><span>Régua de Refrigerantes</span></button>
+  <button id="n-home" class="on" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span>Início</span></button>
+  <button id="n-regua" onclick="go('regua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="8" height="20" rx="1.5" fill="currentColor" stroke="none"/><path d="M9 6h4M10 9h3M9 12h4M10 15h3M9 18h4" stroke="#1c1c1e"/><path d="M16 21v-6a1.2 1.2 0 012.4 0v2l3-.5v4" stroke="currentColor"/></svg><span>Régua</span></button>
   <button id="n-tools" onclick="go('tools')"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg><span>Ferramentas</span></button>
   <button id="n-conf" onclick="go('conf')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 000-2l2.1-1.6-2-3.4-2.5 1a7.6 7.6 0 00-1.7-1L15 3.3h-4l-.4 2.7a7.6 7.6 0 00-1.7 1l-2.5-1-2 3.4L6.6 11a7.5 7.5 0 000 2l-2.1 1.6 2 3.4 2.5-1c.5.4 1.1.7 1.7 1l.4 2.7h4l.4-2.7c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.4L19.4 13zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/></svg><span>Configurações</span></button>
 </div></nav>
@@ -251,6 +407,15 @@ const PSI=14.5038, TMIN=-60, TMAX=60; let ATM=14.6959;
 let gas='R404A', temp=11;
 const $=id=>document.getElementById(id);
 const dew=$('t-dew'), abs=$('t-abs');
+
+let toastTimeout;
+function showToast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => el.classList.remove('show'), 2500);
+}
 
 /* Interpolação logarítmica (pressão de saturação é ~exponencial) */
 function pBar(t){
@@ -415,14 +580,16 @@ function toggleSpec(){
   $('spec').style.display=open?'none':'block'; $('tab-arrow').classList.toggle('open',open);
 }
 
-/* Navegação inferior */
+/* Navegação inferior (Atualizado) */
 function go(id){
-  const map={regua:'regua',tools:'tools',conf:'conf'};
+  const map={home:'home',regua:'regua',tools:'tools',conf:'conf'};
   Object.keys(map).forEach(k=>{
-    $('p-'+k).classList.toggle('on',k===id);
-    $('n-'+k).classList.toggle('on',k===id);
+    const p = $('p-'+k);
+    if(p) p.classList.toggle('on',k===id);
+    const n = $('n-'+k);
+    if(n) n.classList.toggle('on',k===id);
   });
-  if(id==='regua') drawRuler();
+  if(id==='regua') setTimeout(drawRuler, 10); // Aguarda display block
   if(id==='tools') startSensor(); else stopSensor();
 }
 
@@ -482,7 +649,7 @@ function onMag(v){
   const d2=(x-base[0])**2+(y-base[1])**2+(z-base[2])**2;
   base[0]+=(x-base[0])*a; base[1]+=(y-base[1])*a; base[2]+=(z-base[2])*a;
   devBuf.push(d2); if(devBuf.length>30) devBuf.shift();
-  let ac=0;                                             // AC = amplitude da oscilação do campo (µT)
+  let ac=0;                                              // AC = amplitude da oscilação do campo (µT)
   if(devBuf.length>=15) ac=Math.sqrt(2*devBuf.reduce((t,q)=>t+q,0)/devBuf.length);
   const now=performance.now(); cnt++; if(now-rateT>=1000){rate=cnt;cnt=0;rateT=now;}
   magUI(dc,ac,x,y);
@@ -532,8 +699,8 @@ function loop(){ if(!sim) return; magUI(180+Math.random()*40,5); setTimeout(loop
 setSoundUI();
 
 /* ===== PWA ===== */
-const man={name:"Ferramentas HVAC-R",short_name:"HVAC Tools",start_url:location.href,display:"standalone",background_color:"#121212",theme_color:"#121212",orientation:"portrait",
-  icons:[{src:"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M13 10V3L4 14h7v7l9-11h-7z'/%3E%3C/svg%3E",sizes:"192x192",type:"image/svg+xml"}]};
+const man={name:"Ferramentas HVAC-R",short_name:"HVAC Tools",start_url:location.href,display:"standalone",background_color:"#0a0e17",theme_color:"#0a0e17",orientation:"portrait",
+  icons:[{src:"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300b4ff'%3E%3Cpath d='M13 10V3L4 14h7v7l9-11h-7z'/%3E%3C/svg%3E",sizes:"192x192",type:"image/svg+xml"}]};
 $('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:'application/json'}));
 let dp;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('install-banner').style.display='flex'});
@@ -542,8 +709,9 @@ $('btn-install').addEventListener('click',async()=>{
   if(outcome==='accepted') $('install-banner').style.display='none'; dp=null;
 });
 
-applyCfg();full();
-requestAnimationFrame(drawRuler);
+applyCfg();
+full();
+// Não chama drawRuler no começo pois a página Régua está oculta
 </script>
 </body>
 </html>
