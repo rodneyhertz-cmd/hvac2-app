@@ -448,16 +448,17 @@ function onMag(v){
   const now=performance.now(); cnt++; if(now-rateT>=1000){rate=cnt;cnt=0;rateT=now;}
   magUI(dc,ac,x,y);
 }
-const NATIVE=()=>window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.Plugins&&Capacitor.Plugins.Magnet;
-let nHandle=null;
+const NATIVE=()=>window.AndroidMag;
+let gotNative=false;
+window.onNativeMag=function(arr){ gotNative=true; if(!sensor||!sensor.native) return; for(const a of arr) onMag({x:a[0],y:a[1],z:a[2]}); };
 function startSensor(){
   if(sensor||sim) return;
-  const M=NATIVE();
-  if(M){                                           // app Android: sensor nativo, sem flag do Chrome
-    buf=[]; cnt=0; rate=0; rateT=performance.now(); sensor={native:true};
+  if(NATIVE()){                                    // app Android: sensor nativo
+    if(!AndroidMag.has()) return setStatus('Este aparelho não tem magnetômetro.','#ef4444');
+    buf=[]; cnt=0; rate=0; rateT=performance.now(); gotNative=false; sensor={native:true};
     setStatus('Iniciando sensor...','#eab308');
-    M.addListener('reading',onMag).then(h=>{nHandle=h});
-    M.start().catch(()=>{sensor=null;setStatus('Este aparelho não tem magnetômetro.','#ef4444')});
+    AndroidMag.start();
+    setTimeout(()=>{ if(sensor&&sensor.native&&!gotNative) setStatus('Sem leituras do sensor. Feche e abra o app de novo.','#ef4444'); },2500);
     return;
   }
   if(!window.isSecureContext) return setStatus('Abra o app por HTTPS para liberar o sensor magnético.','#eab308');
@@ -476,7 +477,7 @@ function startSensor(){
   }
 }
 function stopSensor(){
-  if(sensor&&sensor.native){ const M=NATIVE(); try{M.stop()}catch(e){} if(nHandle){try{nHandle.remove()}catch(e){} nHandle=null;} sensor=null; return; }
+  if(sensor&&sensor.native){ try{AndroidMag.stop()}catch(e){} sensor=null; return; }
   if(sensor){try{sensor.stop()}catch(e){} sensor=null;}
 }
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopSensor(); else if($('p-tools').classList.contains('on')) startSensor(); });
