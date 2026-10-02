@@ -175,6 +175,7 @@ nav svg{width:26px;height:26px}
       <div class="card"><b>DC: <span id="dc">37</span> µT</b><small>Limite: 120 µT</small></div>
     </div>
     <div class="status" id="sensor-status">Aguardando ativação do sensor...</div>
+    <div id="diag" style="text-align:center;font-size:11px;color:#6b7280;margin:-6px 0 12px"></div>
     <p style="text-align:center;font-size:12px;color:#ccc;margin:0 8px 16px">A agulha gira quando o campo magnético detectado está acima do limite especificado.</p>
     <div class="card simrow" onclick="toggleSim()"><span>Simulador de Magnetismo</span><div class="simtg" id="simtg"><i></i></div></div>
     <div class="sign">Criado por Rodney Hertz</div>
@@ -450,14 +451,15 @@ function onMag(v){
 }
 const NATIVE=()=>window.AndroidMag;
 let gotNative=false;
-window.onNativeMag=function(arr){ gotNative=true; if(!sensor||!sensor.native) return; for(const a of arr) onMag({x:a[0],y:a[1],z:a[2]}); };
+let nTotal=0;
+window.onNativeMag=function(arr){ gotNative=true; nTotal+=arr.length; if(!sensor||!sensor.native) return; for(const a of arr) onMag({x:a[0],y:a[1],z:a[2]}); };
 function startSensor(){
   if(sensor||sim) return;
   if(NATIVE()){                                    // app Android: sensor nativo
     if(!AndroidMag.has()) return setStatus('Este aparelho não tem magnetômetro.','#ef4444');
     buf=[]; cnt=0; rate=0; rateT=performance.now(); gotNative=false; sensor={native:true};
     setStatus('Iniciando sensor...','#eab308');
-    AndroidMag.start();
+    AndroidMag.start(); nTotal=0;
     setTimeout(()=>{ if(sensor&&sensor.native&&!gotNative) setStatus('Sem leituras do sensor. Feche e abra o app de novo.','#ef4444'); },2500);
     return;
   }
@@ -476,6 +478,8 @@ function startSensor(){
     setStatus(e&&e.name==='SecurityError'?'Permissão negada: libere "Sensores de movimento" nas configurações do site.':'Não foi possível iniciar o sensor.','#ef4444');
   }
 }
+setInterval(()=>{ const d=$('diag'); if(!d) return;
+  d.textContent='v4 · app Android: '+(window.AndroidMag?'sim':'não')+(window.AndroidMag?' · magnetômetro: '+(AndroidMag.has()?'sim':'não'):'')+' · leituras: '+nTotal; },500);
 function stopSensor(){
   if(sensor&&sensor.native){ try{AndroidMag.stop()}catch(e){} sensor=null; return; }
   if(sensor){try{sensor.stop()}catch(e){} sensor=null;}
