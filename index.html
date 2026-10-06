@@ -68,8 +68,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .hm-by { display: flex; align-items: center; gap: 14px; width: calc(100% - 48px); }
 .hm-by i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #c9972b); }
 .hm-by i:last-child { background: linear-gradient(90deg, #c9972b, transparent); }
-.hm-by span { font-size: 12px; letter-spacing: .28em; color: #b5bfd0; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
-.hm-name { margin-top: 4px; font-size: clamp(22px, 6.4vw, 30px); font-weight: 900; letter-spacing: .02em;
+.hm-by span { font-size: 10px; letter-spacing: .2em; color: #b5bfd0; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+.hm-name { margin-top: 3px; font-size: clamp(15px, 4.4vw, 20px); font-weight: 900; letter-spacing: .02em;
   background: linear-gradient(#ffd75e, #c8921a); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hm-dots { display: flex; gap: 12px; margin-top: 12px; }
 .hm-dots i { width: 12px; height: 12px; border-radius: 50%; background: #3a3f4a; }
@@ -155,10 +155,6 @@ nav svg{width:24px;height:24px;transition:color .2s}
 .drawer h3{font-size:22px;margin:30px 0 14px}
 #alt-box{display:none;padding:14px 0;border-bottom:1px solid #2a2a2c;font-size:14px;color:#ccc}
 #alt-box input{background:#2a2a2e;border:0;outline:0;color:#fff;border-radius:8px;padding:8px 10px;width:100px;font-size:16px;margin:0 6px}
-.about-mag{margin-top:24px;padding-top:24px;border-top:1px solid #2a2a2c}
-.about-mag h3{color:var(--accent-blue);font-size:18px;margin:0 0 12px;}
-.about-mag ul{padding-left:20px;margin:8px 0;color:#ccc;font-size:13.5px;line-height:1.6}
-.about-mag .note{background:rgba(201,0,15,0.1);border-left:3px solid var(--accent-red);padding:10px;margin-top:16px;font-size:13px;color:#e2e8f0}
 
 /* ========================================= */
 /* MAGNETIC TOOL (HTZ) */
@@ -411,13 +407,12 @@ nav svg{width:24px;height:24px;transition:color .2s}
     <!-- >>> LOGO: troque o src abaixo pelo  data:image/webp;base64,...  do seu arquivo antigo (img class="hm-logo") <<< -->
     <img class="hm-logo" alt="HVAC-HTZ" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
     <h1 class="hm-title"><span class="l1">Ferramenta de</span><span class="l2"><span class="hv">HVAC</span> <span class="hz">- HTZ</span></span></h1>
-    <p class="hm-sub">Indicado para profissionais da área de Refrigeração, automação naval e residencial, eletricidade residencial, naval e automotiva, incluindo GNV, auxiliando no diagnóstico.</p>
+    <p class="hm-sub">Indicado para profissionais da área de Refrigeração, automação e elétrica em geral.</p>
 
     <div class="hm-grid">
       <div class="hm-item" onclick="go('regua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M4.9 19.1L19.1 4.9M8 4l4-4 4 4M8 20l4 4 4-4M4 8l-4 4 4 4M20 8l4 4-4 4"/></svg><span>Refrigeração</span></div>
       <div class="hm-item" onclick="go('eletronica')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg><span>Eletrônica</span></div>
       <div class="hm-item amber" onclick="go('eletrica')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>Elétrica</span></div>
-      <div class="hm-item" onclick="go('tools')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg><span>Teste Magnético</span></div>
       <div class="hm-item" onclick="go('automacao')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg><span>Automação</span></div>
     </div>
 
@@ -514,7 +509,7 @@ nav svg{width:24px;height:24px;transition:color .2s}
   </section>
 
   <!-- ============ FERRAMENTAS (MAGNETIC TOOL) ============ -->
-  <section id="p-tools" class="page">
+  <section id="p-tools" class="page" style="display:none!important">
     <div class="head">
       <button class="round gray" aria-label="Voltar" onclick="go('home')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       <h1>Teste Magnético</h1>
@@ -568,7 +563,6 @@ nav svg{width:24px;height:24px;transition:color .2s}
   <button id="n-regua" onclick="go('regua')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="8" height="20" rx="1.5" fill="currentColor" stroke="none"/><path d="M9 6h4M10 9h3M9 12h4M10 15h3M9 18h4" stroke="#1c1c1e"/><path d="M16 21v-6a1.2 1.2 0 012.4 0v2l3-.5v4" stroke="currentColor"/></svg><span>Régua</span></button>
   <button id="n-eletronica" onclick="go('eletronica')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg><span>Eletrônica</span></button>
   <button id="n-eletrica" onclick="go('eletrica')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>Elétrica</span></button>
-  <button id="n-tools" onclick="go('tools')"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg><span>Magnético</span></button>
 </div></nav>
 
 <!-- Modais do Sistema / Régua -->
@@ -586,20 +580,6 @@ nav svg{width:24px;height:24px;transition:color .2s}
   <div id="alt-box">Altitude<input id="s-alt" inputmode="numeric" value="0"><span id="s-altu">m</span><p style="margin:10px 0 0">Pressão ambiente: <b id="s-atm"></b></p></div>
   <div class="row" style="cursor:pointer" onclick="shareCfg()"><span id="s-share-t">Compartilhe suas configurações</span><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="6" cy="12" r="2.6" fill="#fff"/><circle cx="18" cy="5.5" r="2.6" fill="#fff"/><circle cx="18" cy="18.5" r="2.6" fill="#fff"/><path d="M8 11l8-4.2M8 13l8 4.2"/></svg></div>
 
-  <div class="about-mag">
-    <h3>Como funciona o Teste Magnético</h3>
-    <p><b>1. Escala do microtesla (µT)</b><br>O microtesla é uma unidade utilizada para medir a intensidade do campo magnético. Um microtesla equivale a 0,000001 tesla.</p>
-    <p><b>2. Campo magnético terrestre</b><br>O campo natural da Terra apresenta intensidade aproximada entre 25 µT e 65 µT. Leituras nessa faixa representam o campo magnético terrestre normal.</p>
-    <p><b>3. Variações do campo magnético</b><br>Leituras diferentes do esperado podem ser causadas pela proximidade de ímãs, alto-falantes, motores, bobinas ou estruturas metálicas. A variação depende da distância e da fonte.</p>
-    <p><b>4. Ajuste de sensibilidade</b><br>O Teste Magnético possui uma barra deslizante que permite ajustar a sensibilidade de 0% a 100%:</p>
-    <ul>
-      <li><b>Baixa sensibilidade:</b> reduz a resposta a pequenas variações e diminui alertas frequentes.</li>
-      <li><b>Média:</b> oferece equilíbrio entre estabilidade e percepção das variações.</li>
-      <li><b>Alta:</b> destaca pequenas variações, aumentando a quantidade de alertas.</li>
-    </ul>
-    <p><b>5. Limites de alarme AC e DC</b><br>Os valores apresentados nos cartões representam os limites configurados, que são atualizados automaticamente ao movimentar a barra.</p>
-    <div class="note"><b>Observação:</b> O magnetômetro mede o campo magnético resultante no local. A confiabilidade depende da calibração, orientação do aparelho e proximidade com as bobinas (recomendado &lt; 10 cm).</div>
-  </div>
 </div></div>
 
 <div id="gas-modal" class="modal"><div class="sheet" id="gas-sheet"><h2>Selecionar Fluido Refrigerante</h2><div id="gas-list"></div></div></div>
